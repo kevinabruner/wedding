@@ -104,14 +104,14 @@
 
     - name: Set permissions for /var/www/html
       ansible.builtin.file:
-        path: /var/www/html
+        path: "{{ web_dir }}"
         mode: "0775"
         recurse: yes
       become: yes
 
     - name: Set permissions for cache
       ansible.builtin.file:
-        path: /var/www/html/resources/cache
+        path: "{{ web_dir }}/resources/cache"
         mode: "0777"
         name: www-data
         groups: www-data
