@@ -110,13 +110,13 @@
       become: yes
 
     - name: Set permissions for cache
-    ansible.builtin.file:
-      path: /var/www/html/resources/cache
-      mode: "0777"
-      name: www-data
-      groups: www-data
-      recurse: yes        
-    become: yes
+      ansible.builtin.file:
+        path: /var/www/html/resources/cache
+        mode: "0777"
+        name: www-data
+        groups: www-data
+        recurse: yes        
+      become: yes
 
 
 
