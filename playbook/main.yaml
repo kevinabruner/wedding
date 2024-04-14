@@ -1,0 +1,103 @@
+- name: Build 
+  hosts: wedding
+  vars_files:
+    - vars.yaml
+  tasks:                
+    - name: Install apt packages
+      apt:
+        update_cache: yes
+        name: "{{ item }}"
+      loop:
+        - apache2
+        - php
+        - php-curl
+        - php-gd
+        - php-imagick
+        - ncdu        
+        - vim
+        - htop        
+      become: true
+
+    - name: Ensure user kevin exists
+      user:
+        name: kevin
+        state: present
+      become: yes
+
+    - name: Ensure group www-data exists
+      group:
+        name: www-data
+        state: present
+      become: yes
+
+    - name: Add user kevin to group www-data
+      user:
+        name: kevin
+        groups: www-data
+        append: yes
+      become: yes
+
+    - name: Remove existing web directory
+      file:
+        path: /var/www
+        state: absent
+      become: yes
+
+    - name: Ensure the www-data user owns the web folder
+      ansible.builtin.file:
+        path: /var/www
+        state: directory
+        recurse: yes
+        owner: kevin
+        group: www-data
+        mode: '0774'
+      become: true  
+     
+    - name: Clone the repository 
+      git:
+        repo: "{{ GIT_REPO }}"
+        dest: "{{ git_dir }}"
+        clone: yes
+        force: true        
+        version: "{{ GIT_BRANCH }}"
+      become_user: kevin             
+
+    - name: Enable apache2 service
+      systemd:
+        name: apache2
+        enabled: yes
+      become: true                    
+    
+    - name: Replace block of text
+      ansible.builtin.replace:
+        path: /etc/apache2/apache2.conf
+        regexp: "(<Directory /var/www/>)\\n(\\s+Options Indexes FollowSymLinks\\n\\s+AllowOverride) None(\\n\\s+Require all granted\\n</Directory>)"
+        replace: "\\1\\n\\2 All\\3"
+        backup: yes
+      become: true
+
+    - name: Enable Apache rewrite module
+      become: true
+      command: a2enmod rewrite
+
+    - name: Restart apache
+      service:
+        name: apache2
+        state: restarted
+      become: yes    
+
+    - name: Add NFS share entries to /etc/fstab    
+      ansible.builtin.loop:
+        with_items:
+          - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/gallery-images", nfs_target_dir: "{{ git_dir }}/html/gallery-images" }
+          - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/images", nfs_target_dir: "{{ git_dir }}/html/images" }       
+
+      ansible.builtin.include_tasks: add_nfs_share.yaml
+      vars:
+        nfs_server: "{{ item.nfs_server }}"
+        nfs_share: "{{ item.nfs_share }}"
+        nfs_target_dir: "{{ item.nfs_target_dir }}"
+      become: true 
+
+
+    
