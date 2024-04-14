@@ -89,7 +89,7 @@
 
     - name: Sync gallery-images
       ansible.builtin.synchronize:
-        src: "{{ git_dir }}//gallery-images"
+        src: "{{ nfs_target }}/gallery-images"
         dest: "{{ web_dir }}/gallery-images"
         delete: false
         recursive: true
@@ -97,7 +97,7 @@
 
     - name: Sync images
       ansible.builtin.synchronize:
-        src: "{{ git_dir }}//images"
+        src: "{{ nfs_target }}//images"
         dest: "{{ web_dir }}/images"
         delete: false
         recursive: true
