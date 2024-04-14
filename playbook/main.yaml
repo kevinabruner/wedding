@@ -98,17 +98,38 @@
         state: restarted
       become: yes    
 
+
+    - name: create folder for nfs share
+      ansible.builtin.file:
+        path: "{{ git_dir }}/nfs_target1"
+        state: directory
+        recurse: yes
+        owner: kevin
+        group: www-data
+        mode: '0774'
+      become: true  
+    
+    - name: create another folder for nfs share
+      ansible.builtin.file:
+        path: "{{ git_dir }}/nfs_target2"
+        state: directory
+        recurse: yes
+        owner: kevin
+        group: www-data
+        mode: '0774'
+      become: true  
+
     - name: Add NFS share entry to /etc/fstab
       ansible.builtin.lineinfile:
         path: /etc/fstab
-        line: "{{ nfs_server }}:/mnt/yes/gitbuilds/wedding/images    {{ git_dir }}/html/images    nfs    defaults    0 0"
+        line: "{{ nfs_server }}:{{ nfs_share1 }}    {{ git_dir }}{{ nfs_target1 }}    nfs    defaults    0 0"
         insertafter: EOF
       become: true
 
     - name: Add another NFS share entry to /etc/fstab
       ansible.builtin.lineinfile:
         path: /etc/fstab
-        line: "{{ nfs_server }}:/mnt/yes/gitbuilds/wedding/gallery-images    {{ git_dir }}/html/gallery-images    nfs    defaults    0 0"
+        line: "{{ nfs_server }}:{{ nfs_share2 }}    {{ git_dir }}{{ nfs_target2 }}    nfs    defaults    0 0"
         insertafter: EOF
       become: true
 
