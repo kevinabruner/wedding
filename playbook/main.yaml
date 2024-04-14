@@ -101,7 +101,7 @@
 
     - name: create folder for nfs share
       ansible.builtin.file:
-        path: "{{ git_dir }}/nfs_target1"
+        path: "{{ git_dir }}/{{ nfs_target1 }}"
         state: directory
         recurse: yes
         owner: kevin
@@ -111,7 +111,7 @@
     
     - name: create another folder for nfs share
       ansible.builtin.file:
-        path: "{{ git_dir }}/nfs_target2"
+        path: "{{ git_dir }}/{{ nfs_target2 }}"
         state: directory
         recurse: yes
         owner: kevin
