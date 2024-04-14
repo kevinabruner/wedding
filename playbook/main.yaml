@@ -101,7 +101,6 @@
         cmd: rsync -av --exclude='.*' {{ nfs_target }}/gallery-images/ /{{ web_dir }}/gallery-images/
       become: yes
 
-
     - name: Set permissions for /var/www/html
       ansible.builtin.file:
         path: "{{ web_dir }}"
