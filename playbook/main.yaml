@@ -45,8 +45,7 @@
         clone: yes
         force: true        
         version: "main"
-      become_user: kevin             
-      when: index_php.stat.exists == False      
+      become_user: kevin                   
 
     - name: Enable apache2 service
       systemd:
