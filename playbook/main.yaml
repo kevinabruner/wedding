@@ -64,8 +64,7 @@
         path: "{{ nfs_target }}"
         state: directory
         recurse: yes
-        owner: kevin
-        group: www-data
+        owner: kevin        
         mode: '0774'      
 
     - name: Add NFS share entry to /etc/fstab
