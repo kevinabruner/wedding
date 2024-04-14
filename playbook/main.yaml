@@ -19,7 +19,8 @@
         - php-imagick
         - ncdu        
         - vim
-        - htop        
+        - htop       
+        - nfs-common 
       become: true
 
     - name: Ensure user kevin exists
