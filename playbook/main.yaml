@@ -3,9 +3,9 @@
   vars_files:
     - vars.yaml
   tasks:                
-    - name: Run sudo umount -a
+    - name: Run sudo umount -a -t nfs
       become: true
-      command: umount -a      
+      command: umount -a -t nfs      
 
     - name: Install apt packages
       apt:  
