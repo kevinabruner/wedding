@@ -53,18 +53,6 @@
         enabled: yes
       become: true                    
     
-    - name: Replace block of text
-      ansible.builtin.replace:
-        path: /etc/apache2/apache2.conf
-        regexp: "(<Directory /var/www/>)\\n(\\s+Options Indexes FollowSymLinks\\n\\s+AllowOverride) None(\\n\\s+Require all granted\\n</Directory>)"
-        replace: "\\1\\n\\2 All\\3"
-        backup: yes
-      become: true
-
-    - name: Enable Apache rewrite module
-      become: true
-      command: a2enmod rewrite
-
     - name: Restart apache
       service:
         name: apache2
@@ -73,7 +61,7 @@
 
     - name: create folder for nfs share
       ansible.builtin.file:
-        path: "{{ git_dir }}/{{ nfs_target }}"
+        path: "{{ nfs_target }}"
         state: directory
         recurse: yes
         owner: kevin
@@ -83,7 +71,7 @@
     - name: Add NFS share entry to /etc/fstab
       ansible.builtin.lineinfile:
         path: /etc/fstab
-        line: "{{ nfs_server }}:{{ nfs_share }}    {{ git_dir }}/{{ nfs_target }}    nfs    defaults    0 0"
+        line: "{{ nfs_server }}:{{ nfs_share }}    {{ nfs_target }}    nfs    defaults    0 0"
         insertafter: EOF
       become: true
 
