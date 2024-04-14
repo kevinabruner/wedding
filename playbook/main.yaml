@@ -107,7 +107,7 @@
     - name: Add another NFS share entry to /etc/fstab
       ansible.builtin.lineinfile:
         path: /etc/fstab
-        line: "{{ another_nfs_server }}:{{ another_nfs_share }}    {{ git_dir }}/html/images    nfs    defaults    0 0"
+        line: "{{ nfs_server }}:/mnt/yes/gitbuilds/wedding/gallery-images    {{ git_dir }}/html/gallery-images    nfs    defaults    0 0"
         insertafter: EOF
       become: true
 
