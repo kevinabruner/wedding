@@ -99,7 +99,6 @@
         state: restarted
       become: yes    
 
-
     - name: create folder for nfs share
       ansible.builtin.file:
         path: "{{ git_dir }}/{{ nfs_target }}"
@@ -133,6 +132,14 @@
         dest: /var/www/html/gallery-images
         state: link
       become: yes
+
+    - name: Set permissions for /var/www/html
+      ansible.builtin.file:
+        path: /var/www/html
+        mode: "0775"
+        recurse: yes
+      become: yes
+
 
 
     
