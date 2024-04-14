@@ -86,19 +86,23 @@
         state: restarted
       become: yes    
 
-    - name: Add NFS share entries to /etc/fstab    
-      block:
-        ansible.builtin.loop:
-          with_items:
-            - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/gallery-images", nfs_target_dir: "{{ git_dir }}/html/gallery-images" }
-            - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/images", nfs_target_dir: "{{ git_dir }}/html/images" }       
+    - name: Add NFS share entry to /etc/fstab
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        line: "{{ nfs_server }}:/mnt/yes/gitbuilds/wedding/images    {{ git_dir }}/html/images"    nfs    defaults    0 0"
+        insertafter: EOF
+      become: true
 
-        ansible.builtin.include_tasks: add_nfs_share.yaml
-        vars:
-          nfs_server: "{{ item.nfs_server }}"
-          nfs_share: "{{ item.nfs_share }}"
-          nfs_target_dir: "{{ item.nfs_target_dir }}"
-      become: true 
+    - name: Add another NFS share entry to /etc/fstab
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        line: "{{ another_nfs_server }}:{{ another_nfs_share }}    {{ another_nfs_target_dir }}    nfs    defaults    0 0"
+        insertafter: EOF
+      become: true
 
+    - name: Run sudo mount -a
+      become: true
+      command: mount -a
+    
 
     
