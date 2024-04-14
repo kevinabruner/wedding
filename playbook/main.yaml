@@ -86,21 +86,16 @@
         recursive: true
       become: yes
 
-    - name: Sync gallery-images
-      ansible.builtin.synchronize:
-        src: "{{ nfs_target }}/gallery-images/"
-        dest: "{{ web_dir }}/gallery-images/"
-        delete: false
-        recursive: true
+    - name: Sync images
+      ansible.builtin.shell:
+        cmd: rsync -av --exclude='.*' {{ nfs_target }}/images/ /{{ web_dir }}/images/
       become: yes
 
-    - name: Sync images
-      ansible.builtin.synchronize:
-        src: "{{ nfs_target }}/images/"
-        dest: "{{ web_dir }}/images/"
-        delete: false
-        recursive: true
+    - name: Sync gallery-images      
+      ansible.builtin.shell:
+        cmd: rsync -av --exclude='.*' {{ nfs_target }}/gallery-images/ /{{ web_dir }}/gallery-images/
       become: yes
+
 
     - name: Set permissions for /var/www/html
       ansible.builtin.file:
