@@ -3,7 +3,10 @@
   vars_files:
     - vars.yaml
   tasks:                
-
+    - name: Run sudo umount nfs
+      become: true
+      command: umount {{ git_dir }}/{{ nfs_target }}
+      ignore_errors: true
 
     - name: Install apt packages
       apt:  
