@@ -1,8 +1,8 @@
 APPLICATION: wedding
 ANSIBLE_USER: kevin
 GIT_REPO: https://github.com/kevinabruner/{{ APPLICATION }}.git
-git_dir: /var/www
+git_dir: /home/{{ ANSBILE_USER }}/{{ APPLICATION }}
 netbox_dns: netbox.thejfk.ca
 nfs_server: 192.168.11.20
 nfs_share: /mnt/yes/gitbuilds/wedding/
-nfs_target: /html/wedding-nfs
+nfs_target: /home/{{ ANSBILE_USER }}/{{ APPLICATION }}-nfs

@@ -3,11 +3,6 @@
   vars_files:
     - vars.yaml
   tasks:                
-    - name: Run sudo umount nfs
-      become: true
-      command: umount {{ git_dir }}/{{ nfs_target }}
-      ignore_errors: true
-
     - name: Install apt packages
       apt:  
         update_cache: yes
@@ -42,29 +37,7 @@
         groups: www-data
         append: yes
       become: yes
-
-    - name: Check if index.php exists in /var/www
-      ansible.builtin.stat:
-        path: /var/www/index.php
-      register: index_php
-
-    - name: Remove existing web directory if index.php does not exist
-      ansible.builtin.file:
-        path: /var/www
-        state: absent
-      when: index_php.stat.exists == False
-      become: yes
-
-    - name: Ensure the www-data user owns the web folder
-      ansible.builtin.file:
-        path: /var/www
-        state: directory
-        recurse: yes
-        owner: kevin
-        group: www-data
-        mode: '0774'
-      become: true  
-     
+        
     - name: Clone the repository 
       git:
         repo: "{{ GIT_REPO }}"
@@ -111,26 +84,37 @@
     - name: Add NFS share entry to /etc/fstab
       ansible.builtin.lineinfile:
         path: /etc/fstab
-        line: "{{ nfs_server }}:{{ nfs_share }}    {{ git_dir }}{{ nfs_target }}    nfs    defaults    0 0"
+        line: "{{ nfs_server }}:{{ nfs_share }}    {{ git_dir }}/{{ nfs_target }}    nfs    defaults    0 0"
         insertafter: EOF
       become: true
 
     - name: Run sudo mount -a
       become: true
       command: mount -a -t nfs
-    
-    - name: Create symbolic link for images directory
-      ansible.builtin.file:
-        src: /var/www/html/wedding-nfs/images
-        dest: /var/www/html/images
-        state: link
+
+
+    - name: Sync files from github directory to web
+      ansible.builtin.synchronize:
+        src: "{{ git_dir }}"
+        dest: "{{ web_dir }}"
+        delete: false
+        recursive: true
       become: yes
 
-    - name: Create symbolic link for gallery-images directory
-      ansible.builtin.file:
-        src: /var/www/html/wedding-nfs/gallery-images
-        dest: /var/www/html/gallery-images
-        state: link
+    - name: Sync gallery-images
+      ansible.builtin.synchronize:
+        src: "{{ git_dir }}//gallery-images"
+        dest: "{{ web_dir }}/gallery-images"
+        delete: false
+        recursive: true
+      become: yes
+
+    - name: Sync images
+      ansible.builtin.synchronize:
+        src: "{{ git_dir }}//images"
+        dest: "{{ web_dir }}/images"
+        delete: false
+        recursive: true
       become: yes
 
     - name: Set permissions for /var/www/html
