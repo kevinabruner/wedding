@@ -78,11 +78,10 @@
       become: true
       command: mount -a -t nfs
 
-
     - name: Sync files from github directory to web
       ansible.builtin.synchronize:
-        src: "{{ git_dir }}"
-        dest: "{{ web_dir }}"
+        src: "{{ git_dir }}/html/*"
+        dest: "{{ web_dir }}/"
         delete: false
         recursive: true
       become: yes
