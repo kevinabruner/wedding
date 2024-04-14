@@ -4,7 +4,5 @@ GIT_REPO: https://github.com/kevinabruner/{{ APPLICATION }}.git
 git_dir: /var/www
 netbox_dns: netbox.thejfk.ca
 nfs_server: 192.168.11.20
-nfs_share1: /mnt/yes/gitbuilds/wedding/images
-nfs_share2: /mnt/yes/gitbuilds/wedding/gallery-images
-nfs_target1: /html/images
-nfs_target2: /html/gallery-images
+nfs_share: /mnt/yes/gitbuilds/wedding/
+nfs_target: /html/wedding-nfs

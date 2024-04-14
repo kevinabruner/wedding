@@ -101,17 +101,7 @@
 
     - name: create folder for nfs share
       ansible.builtin.file:
-        path: "{{ git_dir }}/{{ nfs_target1 }}"
-        state: directory
-        recurse: yes
-        owner: kevin
-        group: www-data
-        mode: '0774'
-      become: true  
-    
-    - name: create another folder for nfs share
-      ansible.builtin.file:
-        path: "{{ git_dir }}/{{ nfs_target2 }}"
+        path: "{{ git_dir }}/{{ nfs_target }}"
         state: directory
         recurse: yes
         owner: kevin
@@ -122,14 +112,7 @@
     - name: Add NFS share entry to /etc/fstab
       ansible.builtin.lineinfile:
         path: /etc/fstab
-        line: "{{ nfs_server }}:{{ nfs_share1 }}    {{ git_dir }}{{ nfs_target1 }}    nfs    defaults    0 0"
-        insertafter: EOF
-      become: true
-
-    - name: Add another NFS share entry to /etc/fstab
-      ansible.builtin.lineinfile:
-        path: /etc/fstab
-        line: "{{ nfs_server }}:{{ nfs_share2 }}    {{ git_dir }}{{ nfs_target2 }}    nfs    defaults    0 0"
+        line: "{{ nfs_server }}:{{ nfs_share }}    {{ git_dir }}{{ nfs_target }}    nfs    defaults    0 0"
         insertafter: EOF
       become: true
 
@@ -137,5 +120,19 @@
       become: true
       command: mount -a -t nfs
     
+    - name: Create symbolic link for images directory
+      ansible.builtin.file:
+        src: /var/www/html/wedding-nfs/images
+        dest: /var/www/html/images
+        state: link
+      become: yes
+
+    - name: Create symbolic link for gallery-images directory
+      ansible.builtin.file:
+        src: /var/www/html/wedding-nfs/gallery-images
+        dest: /var/www/html/gallery-images
+        state: link
+      become: yes
+
 
     
