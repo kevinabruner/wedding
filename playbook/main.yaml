@@ -3,6 +3,10 @@
   vars_files:
     - vars.yaml
   tasks:                
+    - name: Run sudo umount -a
+      become: true
+      command: umount -a
+
     - name: Install apt packages
       apt:
         update_cache: yes
