@@ -107,8 +107,7 @@
         recurse: yes
         owner: kevin
         group: www-data
-        mode: '0774'
-      become: true  
+        mode: '0774'      
 
     - name: Add NFS share entry to /etc/fstab
       ansible.builtin.lineinfile:
