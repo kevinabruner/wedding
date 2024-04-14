@@ -59,7 +59,7 @@
         dest: "{{ git_dir }}"
         clone: yes
         force: true        
-        version: "{{ GIT_BRANCH }}"
+        version: "main"
       become_user: kevin             
 
     - name: Enable apache2 service
