@@ -87,16 +87,17 @@
       become: yes    
 
     - name: Add NFS share entries to /etc/fstab    
-      ansible.builtin.loop:
-        with_items:
-          - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/gallery-images", nfs_target_dir: "{{ git_dir }}/html/gallery-images" }
-          - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/images", nfs_target_dir: "{{ git_dir }}/html/images" }       
+      block:
+        ansible.builtin.loop:
+          with_items:
+            - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/gallery-images", nfs_target_dir: "{{ git_dir }}/html/gallery-images" }
+            - { nfs_server: "{{ nfs_server }}", nfs_share: "/mnt/yes/gitbuilds/wedding/images", nfs_target_dir: "{{ git_dir }}/html/images" }       
 
-      ansible.builtin.include_tasks: add_nfs_share.yaml
-      vars:
-        nfs_server: "{{ item.nfs_server }}"
-        nfs_share: "{{ item.nfs_share }}"
-        nfs_target_dir: "{{ item.nfs_target_dir }}"
+        ansible.builtin.include_tasks: add_nfs_share.yaml
+        vars:
+          nfs_server: "{{ item.nfs_server }}"
+          nfs_share: "{{ item.nfs_share }}"
+          nfs_target_dir: "{{ item.nfs_target_dir }}"
       become: true 
 
 
