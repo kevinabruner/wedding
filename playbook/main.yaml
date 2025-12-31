@@ -1,5 +1,5 @@
 - name: Build 
-  hosts: wedding
+  hosts: repo_wedding
   vars_files:
     - vars.yaml
   tasks:                
