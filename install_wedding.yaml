@@ -1,0 +1,6 @@
+- name: Install wedding website application
+  hosts: repo_wedding:!role_vm_template
+  roles:                  
+    - wedding_common
+    - wedding_files
+    - wedding_storage
