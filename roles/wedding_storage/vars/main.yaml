@@ -17,4 +17,4 @@ nfs_mounts:
     src: "{{ nfs_server }}:{{ nfs_target }}/cache" 
   - path: "{{ web_dir }}/gallery-images/"
     src: "{{ nfs_server }}:{{ nfs_target }}/gallery-images/" 
-
+    
