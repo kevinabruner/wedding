@@ -1,0 +1,6 @@
+- name: Install wedding website application
+  hosts: all
+  roles:                  
+    - wedding_common
+    - wedding_files
+    - wedding_storage

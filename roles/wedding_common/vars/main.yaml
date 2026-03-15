@@ -1,0 +1,10 @@
+apt_packages:
+  - apache2
+  - php
+  - php-curl
+  - php-gd
+  - php-imagick
+  - ncdu        
+  - vim
+  - htop       
+  - nfs-common 
