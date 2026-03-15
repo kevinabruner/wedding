@@ -36,16 +36,7 @@
         name: kevin
         groups: www-data
         append: yes
-      become: yes
-        
-    - name: Clone the repository 
-      git:
-        repo: "{{ GIT_REPO }}"
-        dest: "{{ git_dir }}"
-        clone: yes
-        force: true        
-        version: "main"
-      become_user: kevin                   
+      become: yes     
 
     - name: Enable apache2 service
       systemd:
