@@ -13,5 +13,5 @@
     src: "{{ item.src }}"
     fstype: nfs
     opts: "{{ nfs_options | join(',') }}"
-    state: mounted
+    state: present
   loop: "{{ nfs_mounts }}"
