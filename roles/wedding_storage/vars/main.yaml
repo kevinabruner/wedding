@@ -1,0 +1,20 @@
+nfs_server: 192.168.11.20
+nfs_options:
+  - defaults
+  - x-systemd.automount
+  - x-systemd.idle-timeout=60s
+  - soft
+  - timeo=14
+  - retrans=2
+  - _netdev
+  #- noauto
+nfs_mounts:
+  - path: "/home/{{ ANSIBLE_USER }}/{{ APPLICATION }}-nfs"
+    src: "{{ nfs_server }}:{{ nfs_target }}"    
+  - path: "/{{ web_dir }}/images/"
+    src: "{{ nfs_server }}:/mnt/yes/gitbuilds/wedding/images" 
+  - path: "/{{ web_dir }}/cache/"
+    src: "{{ nfs_server }}:{{ nfs_target }}/cache" 
+  - path: "/{{ web_dir }}/gallery-images/"
+    src: "{{ nfs_server }}:{{ nfs_target }}/gallery-images/" 
+

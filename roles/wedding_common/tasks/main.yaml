@@ -1,0 +1,13 @@
+- name: Install apt packages
+  apt:
+    update_cache: yes
+    name: "{{ apt_packages }}"      
+    state: present    
+  become: true
+
+- name: Enable apache2 service
+  systemd:
+    name: apache2
+    enabled: yes
+    state: stopped
+  become: true    
