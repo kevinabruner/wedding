@@ -7,7 +7,7 @@ nfs_options:
   - timeo=14
   - retrans=2
   - _netdev
-  #- noauto
+  - noauto
 nfs_mounts:
   - path: "/home/{{ ANSIBLE_USER }}/{{ APPLICATION }}-nfs"
     src: "{{ nfs_server }}:{{ nfs_target }}"    
@@ -17,4 +17,3 @@ nfs_mounts:
     src: "{{ nfs_server }}:{{ nfs_target }}/cache" 
   - path: "{{ web_dir }}/gallery-images/"
     src: "{{ nfs_server }}:{{ nfs_target }}/gallery-images/" 
-    
