@@ -7,7 +7,6 @@ nfs_options:
   - timeo=14
   - retrans=2
   - _netdev
-  - noauto
 nfs_mounts:
   - path: "/home/{{ ANSIBLE_USER }}/{{ APPLICATION }}-nfs"
     src: "{{ nfs_server }}:{{ nfs_target }}"    
