@@ -29,11 +29,10 @@ fi
 echo "--- Found VMID: $VMID  ---"
 
 echo "--- Running Pre-flight Checklist ---"
-ansible-playbook _packer-preflight.yaml -e "vmid=$VMID" -e "target_app=$app_name" -K
+ansible-playbook _packer-preflight.yaml -e "vmid=$VMID" -K
 
 echo "--- Baking Gold Image for: $app_name ---"
 time packer build \
-    -var "target_app=$app_name" \
     -var "proxmox_vmid=$VMID" \
     -var-file="packer/variables.pkrvars.hcl" \
     -var-file="packer/secret.pkrvars.hcl" \
